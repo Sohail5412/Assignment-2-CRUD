@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Book Manager</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <style>
+    body {
+      padding: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1 class="mt-4 mb-4">Book Manager</h1>
+
+    <div class="row mb-4">
+      <div class="col-md-6">
+        <button class="btn btn-primary" data-toggle="modal" data-target="#addBookModal">Add Book</button>
+      </div>
+      <div class="col-md-6">
+        <input type="text" class="form-control" placeholder="Search books..." id="searchInput">
+      </div>
+    </div>
+
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Author</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="bookList">
+        <!-- Book items will be displayed here -->
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Add Book Modal -->
+  <div class="modal fade" id="addBookModal" tabindex="-1" role="dialog" aria-labelledby="addBookModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addBookModalLabel">Add Book</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="addBookForm">
+            <div class="form-group">
+              <label for="title">Title:</label>
+              <input type="text" class="form-control" id="title" required>
+            </div>
+            <div class="form-group">
+              <label for="author">Author:</label>
+              <input type="text" class="form-control" id="author" required>
+            </div>
+            <div class="form-group">
+              <label for="status">Status:</label>
+              <select class="form-control" id="status" required>
+                <option value="owned">Owned</option>
+                <option value="read">Read</option>
+                <option value="wishlist">Wishlist</option>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Add Book</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  <script>
+    // Sample data (you can replace this with data from a database or API)
+    const books = [
+      { title: 'Book 1', author: 'Author 1', status: 'owned' },
+      { title: 'Book 2', author: 'Author 2', status: 'read' },
+      { title: 'Book 3', author: 'Author 3', status: 'wishlist' },
+    ];
+
+    const bookListContainer = document.getElementById('bookList');
+    const addBookForm = document.getElementById('addBookForm');
+    const searchInput = document.getElementById('searchInput');
+
+    function displayBooks(books) {
+      bookListContainer.innerHTML = '';
+      books.forEach(book => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${book.title}</td>
+          <td>${book.author}</td>
+          <td>${book.status}</td>
+          <td><button class="btn btn-danger btn-sm" onclick="removeBook('${book.title}')">Remove</button></td>
+        `;
+        bookListContainer.appendChild(row);
+      });
+    }
+
+    function addBook(event) {
+      event.preventDefault();
+      const title = document.getElementById('title').value;
+      const author = document.getElementById('author').value;
+      const status = document.getElementById('status').value;
+      books.push({ title, author, status });
+      displayBooks(books);
+      $('#addBookModal').modal('hide');
+    }
+
+    function removeBook(title) {
+      const index = books.findIndex(book => book.title === title);
+      if (index !== -1) {
+        books.splice(index, 1);
+        displayBooks(books);
+      }
+    }
+
+    addBookForm.addEventListener('submit', addBook);
+
+    searchInput.addEventListener('input', function () {
+      const searchTerm = searchInput.value.toLowerCase();
+      const filteredBooks = books.filter(book =>
+        book.title.toLowerCase().includes(searchTerm) ||
+        book.author.toLowerCase().includes(searchTerm) ||
+        book.status.toLowerCase().includes(searchTerm)
+      );
+      displayBooks(filteredBooks);
+    });
+
+    displayBooks(books);
+  </script>
+</body>
+</html>
+

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <style>
+    body {
+      padding: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1 class="mt-4 mb-4">Login</h1>
+
+    <form>
+      <div class="form-group">
+        <label for="username">Username:</label>
+        <input type="text" class="form-control" id="username" required>
+      </div>
+      <div class="form-group">
+        <label for="password">Password:</label>
+        <input type="password" class="form-control" id="password" required>
+      </div>
+      <button type="button" class="btn btn-primary" id="loginButton">Login</button>
+    </form>
+
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<!--   <script src="book.html"></script> --> <!-- Include your existing book.js script -->
+</body>
+</html>
+<!-- Add this script to the end of your existing HTML file -->
+<script>
+  // Check if the user is already logged in
+  function checkLogin() {
+    const isLoggedIn = localStorage.getItem('isLoggedIn');
+    if (!isLoggedIn || isLoggedIn !== 'true') {
+      // Redirect to the login page if not logged in
+      window.location.replace('login.html');
+    }
+  }
+
+  // Perform login
+  function login() {
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+
+    // Check if the username and password match a predefined user (demo purposes)
+    if (username === 'demo' && password === 'password') {
+      // Set the login status to true
+      localStorage.setItem('isLoggedIn', 'true');
+      // Redirect to the main page (book.html)
+      window.location.replace('book.html');
+    } else {
+      alert('Invalid username or password');
+    }
+  }
+
+  // Logout function
+  function logout() {
+    // Clear the login status
+    localStorage.removeItem('isLoggedIn');
+    // Redirect to the login page
+    window.location.replace('login.html');
+  }
+
+  // Attach login and logout functions to the corresponding buttons
+  document.getElementById('loginButton').addEventListener('click', login);
+  document.getElementById('logoutButton').addEventListener('click', logout);
+
+  // Run the checkLogin function when the page loads
+  document.addEventListener('DOMContentLoaded', checkLogin);
+</script>
